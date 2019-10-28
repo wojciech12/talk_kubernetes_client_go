@@ -1,0 +1,161 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>Golang: Kubernetes go-client</title>
+
+		<link rel="stylesheet" href="css/reset.css">
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/white.css">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="lib/css/monokai.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+
+				<section data-background="img/Kubernetes_Gophers.png" data-background-repeat="" data-background-size="30%">
+				<h3>K<span style="text-transform: lowercase;">ubernetes client-go</span></h3>
+					<br />
+				<br />
+				<br />
+				<br />
+				<br />
+				<br />
+				<br />
+				<br />
+				<p><small>W<span style="text-transform: lowercase;">ojciech</span> B<span style="text-transform: lowercase;">arczyński</span> [H<span style="text-transform: lowercase;">ead of</span> E<span style="text-transform: wlowercase;">ngineering</span>]<br />
+				<a href="https://smacc.io" style="color:#fe702f">SMACC.<span style="text-transform: lowercase;">io</span></a> | <a href="https://hypatos.ai" style="color:#3149a8">H<span style="text-transform: lowercase;">ypatos.ai</span></a><br />
+							</span> <!-- W<span style="text-transform: lowercase;">arszawa</span>, 9 S<span style="text-transform: lowercase;">emptember</span> 2019 --></small></p>
+				</section>
+
+
+<!-- WHY -->
+				<section>
+					<h3>K<span style="text-transform: lowercase;">ubernetes</span></h3>
+					<img src="img/babel-fish.jpg" width="70%"/>
+				</section>
+
+				<section>
+					<h3>X<span style="text-transform: lowercase;">ubernetes</span></h3>
+
+					<img src="img/1440px-Close_up_of_Hand_Cut_Jigsaw_Puzzle.jpeg" width="70%"/>
+				</section>
+
+				<section>
+					<h3>K<span style="text-transform: lowercase;">ubernetes client-go</span></h3>
+					<ul>
+						<li>Scripts</li>
+						<li>Automations</li>
+						<li>Operator-SDK</li>
+					</ul>
+				</section>
+								<section>
+					<h3>K<span style="text-transform: lowercase;">ubernetes client-go</span></h3>
+					<ul>
+						<li>Generated from spec</li>
+						<li>Kubernetes json = how it looks in Golang</li>
+					</ul>
+				</section>
+
+<!-- HOW -->
+				<section>
+					<h3>S<span style="text-transform: lowercase;">et project</span></h3>
+					<pre><code data-trim data-noescape class=bash>$ mkdir my-kube
+$ cd my-kube
+$ go mod init my-kube
+$ go get k8s.io/client-go@kubernetes-1.15.3
+					</code></pre>
+				</section>
+
+<section data-markdown>
+	<textarea data-template>
+### V<span style="text-transform: lowercase;">ersion?</span>
+
+Check:<br />https://github.com/kubernetes/client-go#compatibility-matrix
+
+	</textarea>
+</section>
+
+				<section>
+					<h3>M<span style="text-transform: lowercase;">inikube for dev</span></h3>
+					<pre><code data-trim data-noescape class="bash">$ kubectl config use-context minikube
+$ kubectl get po --all-namespaces
+					</code></pre>
+				</section>
+
+				<section>
+					<h3>D<span style="text-transform: lowercase;">emo: list</span></h3>
+					<pre><code data-trim data-noescape class="go">
+func check(clientset *kubernetes.Clientset, namespace string, pod string) {
+	pods, err := clientset.CoreV1().Pods("").List(metav1.ListOptions{})
+	if err != nil {
+		panic(err.Error())
+	}
+	fmt.Printf("There are %d pods in the cluster\n", len(pods.Items))
+					</code></pre>
+				</section>
+
+			
+				<section>
+					<h3>Demo: <span style="text-transform: lowercase;">do you know k8s json</span>?</h3>
+
+<a href="https://github.com/kubernetes/client-go/blob/master/examples/create-update-delete-deployment/main.go">examples/create-update-delete-deployment</a>
+
+					<p><small><a href="https://github.com/kubernetes/client-go/tree/master/examples">more examples</a></small></p>
+				</section>
+
+				<section>
+					<h3>D<span style="text-transform: lowercase;">emo: kubernetes.fake</span></h3>
+
+					<ul>
+						<li><a href="https://github.com/kubernetes/client-go/blob/master/testing/fake.go">fake.go</a></li>
+						<li>Exposes: Faked___ e.g., <code class="go">FakeServerVersion</code></li>
+					</ul>
+
+					<p><small><a href="https://itnext.io/testing-kubernetes-go-applications-f1f87502b6ef">Good tutorial</a></small></p>
+				</section>
+
+<!-- WHAT -->
+<section data-markdown>
+	<textarea data-template>
+### S<span style="text-transform: lowercase;">umary</span>
+
+- Simple to navigate API when you work with k8s for some time
+- Next: <a href="https://github.com/operator-framework/operator-sdk">Operator-SDK</a>
+- Let's go deeper with the next talk!
+	</textarea>
+</section>
+
+			</div>
+		</div>
+
+		<script src="js/reveal.js"></script>
+
+		<script>
+			// More info about config & dependencies:
+			// - https://github.com/hakimel/reveal.js#configuration
+			// - https://github.com/hakimel/reveal.js#dependencies
+			Reveal.initialize({
+				dependencies: [
+					{ src: 'plugin/markdown/marked.js' },
+					{ src: 'plugin/markdown/markdown.js' },
+					{ src: 'plugin/notes/notes.js', async: true },
+					{ src: 'plugin/highlight/highlight.js', async: true }
+				]
+			});
+		</script>
+	</body>
+</html>
